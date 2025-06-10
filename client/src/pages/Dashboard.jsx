@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTransactions } from '../context/TransactionContext';
+import TransactionList from '../components/TransactionList';
 
 const SummaryCard = ({ title, amount, type }) => {
   const getAmountColor = () => {
@@ -57,9 +58,7 @@ const Dashboard = () => {
 
       <div className="bg-white rounded-lg shadow-sm p-6">
         <h2 className="text-lg font-medium text-gray-900 mb-4">Recent Transactions</h2>
-        <div className="text-center text-gray-500 py-8">
-          No transactions yet. Add your first transaction to get started!
-        </div>
+        <TransactionList />
       </div>
     </div>
   );
