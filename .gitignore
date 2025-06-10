@@ -1,0 +1,10 @@
+# Ignore Node.js
+node_modules
+.env
+
+# Ignore frontend build
+client/dist
+
+# Ignore system files
+.DS_Store
+Thumbs.db
