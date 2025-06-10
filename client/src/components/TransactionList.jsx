@@ -34,29 +34,33 @@ const TransactionList = () => {
     }
   };
 
-  if (loading) return <div className="text-center py-4">Loading...</div>;
-  if (error) return <div className="text-center py-4 text-red-500">{error}</div>;
+  if (loading) return <div className="text-center py-4 text-gray-700 dark:text-gray-300">Loading...</div>;
+  if (error) return <div className="text-center py-4 text-red-500 dark:text-red-400">{error}</div>;
 
   return (
-    <div className="mt-8">
-      <h2 className="text-2xl font-bold mb-4">Recent Transactions</h2>
+    <div className="p-6">
+      <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Recent Transactions</h2>
       <div className="space-y-4">
         {transactions.map((transaction) => (
           <div
             key={transaction._id}
-            className="bg-white p-4 rounded-lg shadow flex justify-between items-center"
+            className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow flex justify-between items-center border border-gray-200 dark:border-gray-700"
           >
             <div>
-              <h3 className="font-semibold">{transaction.description}</h3>
-              <p className="text-sm text-gray-600">{transaction.category}</p>
-              <p className="text-sm text-gray-500">
+              <h3 className="font-semibold text-gray-900 dark:text-white">
+                {transaction.description || 'No Description'}
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-300">{transaction.category}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
                 {new Date(transaction.timestamp).toLocaleDateString()}
               </p>
             </div>
             <div className="flex items-center space-x-4">
               <span
                 className={`font-bold ${
-                  transaction.type === 'credit' ? 'text-green-600' : 'text-red-600'
+                  transaction.type === 'credit' 
+                    ? 'text-green-600 dark:text-green-400' 
+                    : 'text-red-600 dark:text-red-400'
                 }`}
               >
                 {transaction.type === 'credit' ? '+' : '-'}${transaction.amount}
@@ -64,13 +68,13 @@ const TransactionList = () => {
               <div className="flex space-x-2">
                 <button
                   onClick={() => handleEdit(transaction)}
-                  className="text-blue-600 hover:text-blue-800"
+                  className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
                 >
                   Edit
                 </button>
                 <button
                   onClick={() => handleDelete(transaction._id)}
-                  className="text-red-600 hover:text-red-800"
+                  className="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300"
                 >
                   Delete
                 </button>

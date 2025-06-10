@@ -63,23 +63,23 @@ const TransactionModal = ({ isOpen, onClose, onSubmit, initialData }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-md">
         <div className="p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
             {initialData ? 'Edit Transaction' : 'Add New Transaction'}
           </h2>
           
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Transaction Type */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Type
               </label>
               <select
                 name="type"
                 value={formData.type}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="debit">Debit</option>
                 <option value="credit">Credit</option>
@@ -88,8 +88,8 @@ const TransactionModal = ({ isOpen, onClose, onSubmit, initialData }) => {
 
             {/* Amount */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Amount (₹)
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Amount ($)
               </label>
               <input
                 type="number"
@@ -98,28 +98,28 @@ const TransactionModal = ({ isOpen, onClose, onSubmit, initialData }) => {
                 onChange={handleChange}
                 min="0"
                 step="0.01"
-                className={`w-full px-3 py-2 border ${
-                  errors.amount ? 'border-red-500' : 'border-gray-300'
-                } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                className={`w-full px-3 py-2 bg-white dark:bg-gray-700 border ${
+                  errors.amount ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
+                } rounded-md text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500`}
                 placeholder="0.00"
               />
               {errors.amount && (
-                <p className="mt-1 text-sm text-red-600">{errors.amount}</p>
+                <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.amount}</p>
               )}
             </div>
 
             {/* Category */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Category
               </label>
               <select
                 name="category"
                 value={formData.category}
                 onChange={handleChange}
-                className={`w-full px-3 py-2 border ${
-                  errors.category ? 'border-red-500' : 'border-gray-300'
-                } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                className={`w-full px-3 py-2 bg-white dark:bg-gray-700 border ${
+                  errors.category ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
+                } rounded-md text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500`}
               >
                 <option value="Food">Food</option>
                 <option value="Travel">Travel</option>
@@ -127,13 +127,13 @@ const TransactionModal = ({ isOpen, onClose, onSubmit, initialData }) => {
                 <option value="Others">Others</option>
               </select>
               {errors.category && (
-                <p className="mt-1 text-sm text-red-600">{errors.category}</p>
+                <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.category}</p>
               )}
             </div>
 
             {/* Description */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Description (Optional)
               </label>
               <input
@@ -141,7 +141,7 @@ const TransactionModal = ({ isOpen, onClose, onSubmit, initialData }) => {
                 name="description"
                 value={formData.description}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Enter description"
               />
             </div>
@@ -151,7 +151,7 @@ const TransactionModal = ({ isOpen, onClose, onSubmit, initialData }) => {
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
               >
                 Cancel
               </button>
