@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const TransactionModal = ({ isOpen, onClose, onSubmit }) => {
+const TransactionModal = ({ isOpen, onClose, onSubmit, transaction }) => {
   const [formData, setFormData] = useState({
     type: 'credit',
     amount: '',
@@ -9,6 +9,26 @@ const TransactionModal = ({ isOpen, onClose, onSubmit }) => {
   });
 
   const [errors, setErrors] = useState({});
+
+  // Update form data when editing an existing transaction
+  useEffect(() => {
+    if (transaction) {
+      setFormData({
+        type: transaction.type,
+        amount: transaction.amount.toString(),
+        category: transaction.category,
+        description: transaction.description || ''
+      });
+    } else {
+      // Reset form when adding new transaction
+      setFormData({
+        type: 'credit',
+        amount: '',
+        category: 'Food',
+        description: ''
+      });
+    }
+  }, [transaction]);
 
   const validateForm = () => {
     const newErrors = {};
@@ -27,13 +47,8 @@ const TransactionModal = ({ isOpen, onClose, onSubmit }) => {
     if (validateForm()) {
       onSubmit({
         ...formData,
-        amount: parseFloat(formData.amount)
-      });
-      setFormData({
-        type: 'credit',
-        amount: '',
-        category: 'Food',
-        description: ''
+        amount: parseFloat(formData.amount),
+        id: transaction?.id // Preserve ID when editing
       });
       onClose();
     }
@@ -54,7 +69,7 @@ const TransactionModal = ({ isOpen, onClose, onSubmit }) => {
       <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
         <div className="p-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            Add New Transaction
+            {transaction ? 'Edit Transaction' : 'Add New Transaction'}
           </h2>
           
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -147,7 +162,7 @@ const TransactionModal = ({ isOpen, onClose, onSubmit }) => {
                 type="submit"
                 className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
-                Add Transaction
+                {transaction ? 'Update Transaction' : 'Add Transaction'}
               </button>
             </div>
           </form>
