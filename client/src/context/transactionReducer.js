@@ -14,39 +14,48 @@ export const initialState = {
 // Transaction Reducer
 export const transactionReducer = (state, action) => {
   switch (action.type) {
-    case ADD_TRANSACTION:
+    case 'SET_LOADING':
       return {
         ...state,
-        transactions: [...state.transactions, {
-          ...action.payload,
-          id: crypto.randomUUID(),
-          timestamp: new Date()
-        }]
+        loading: action.payload
       };
 
-    case EDIT_TRANSACTION:
+    case 'SET_ERROR':
       return {
         ...state,
-        transactions: state.transactions.map(transaction =>
-          transaction.id === action.payload.id
-            ? { ...transaction, ...action.payload }
-            : transaction
-        )
+        error: action.payload
       };
 
-    case DELETE_TRANSACTION:
-      return {
-        ...state,
-        transactions: state.transactions.filter(
-          transaction => transaction.id !== action.payload
-        )
-      };
-
-    case LOAD_TRANSACTIONS:
+    case 'SET_TRANSACTIONS':
       return {
         ...state,
         transactions: action.payload,
-        loading: false
+        error: null
+      };
+
+    case 'ADD_TRANSACTION':
+      return {
+        ...state,
+        transactions: [action.payload, ...state.transactions],
+        error: null
+      };
+
+    case 'UPDATE_TRANSACTION':
+      return {
+        ...state,
+        transactions: state.transactions.map(transaction =>
+          transaction._id === action.payload._id ? action.payload : transaction
+        ),
+        error: null
+      };
+
+    case 'DELETE_TRANSACTION':
+      return {
+        ...state,
+        transactions: state.transactions.filter(
+          transaction => transaction._id !== action.payload
+        ),
+        error: null
       };
 
     default:

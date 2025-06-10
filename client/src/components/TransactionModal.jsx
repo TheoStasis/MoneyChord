@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
-const TransactionModal = ({ isOpen, onClose, onSubmit, transaction }) => {
+const TransactionModal = ({ isOpen, onClose, onSubmit, initialData }) => {
   const [formData, setFormData] = useState({
-    type: 'credit',
+    type: 'debit',
     amount: '',
     category: 'Food',
     description: ''
@@ -10,25 +10,23 @@ const TransactionModal = ({ isOpen, onClose, onSubmit, transaction }) => {
 
   const [errors, setErrors] = useState({});
 
-  // Update form data when editing an existing transaction
   useEffect(() => {
-    if (transaction) {
+    if (initialData) {
       setFormData({
-        type: transaction.type,
-        amount: transaction.amount.toString(),
-        category: transaction.category,
-        description: transaction.description || ''
+        type: initialData.type,
+        amount: initialData.amount.toString(),
+        category: initialData.category,
+        description: initialData.description || ''
       });
     } else {
-      // Reset form when adding new transaction
       setFormData({
-        type: 'credit',
+        type: 'debit',
         amount: '',
         category: 'Food',
         description: ''
       });
     }
-  }, [transaction]);
+  }, [initialData]);
 
   const validateForm = () => {
     const newErrors = {};
@@ -47,8 +45,7 @@ const TransactionModal = ({ isOpen, onClose, onSubmit, transaction }) => {
     if (validateForm()) {
       onSubmit({
         ...formData,
-        amount: parseFloat(formData.amount),
-        id: transaction?.id // Preserve ID when editing
+        amount: parseFloat(formData.amount)
       });
       onClose();
     }
@@ -69,7 +66,7 @@ const TransactionModal = ({ isOpen, onClose, onSubmit, transaction }) => {
       <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
         <div className="p-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            {transaction ? 'Edit Transaction' : 'Add New Transaction'}
+            {initialData ? 'Edit Transaction' : 'Add New Transaction'}
           </h2>
           
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -84,8 +81,8 @@ const TransactionModal = ({ isOpen, onClose, onSubmit, transaction }) => {
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                <option value="credit">Credit</option>
                 <option value="debit">Debit</option>
+                <option value="credit">Credit</option>
               </select>
             </div>
 
@@ -162,7 +159,7 @@ const TransactionModal = ({ isOpen, onClose, onSubmit, transaction }) => {
                 type="submit"
                 className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
-                {transaction ? 'Update Transaction' : 'Add Transaction'}
+                {initialData ? 'Update Transaction' : 'Add Transaction'}
               </button>
             </div>
           </form>

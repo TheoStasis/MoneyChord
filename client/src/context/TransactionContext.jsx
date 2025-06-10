@@ -1,93 +1,88 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
-import { transactionReducer, initialState } from './transactionReducer';
+import { transactionReducer } from './transactionReducer';
+import {
+  getAllTransactions,
+  addTransaction,
+  updateTransaction,
+  deleteTransaction
+} from '../services/api';
 
 // Create Context
 const TransactionContext = createContext();
 
-const STORAGE_KEY = 'fintrackr_transactions';
-
-// Helper function to parse dates when loading from localStorage
-const parseTransactions = (savedTransactions) => {
-  return savedTransactions.map(transaction => ({
-    ...transaction,
-    timestamp: new Date(transaction.timestamp)
-  }));
-};
-
-// Helper function to prepare transactions for localStorage
-const prepareTransactionsForStorage = (transactions) => {
-  return transactions.map(transaction => ({
-    ...transaction,
-    timestamp: transaction.timestamp.toISOString()
-  }));
-};
-
-// Get initial state from localStorage
-const getInitialState = () => {
-  try {
-    const savedTransactions = localStorage.getItem(STORAGE_KEY);
-    if (savedTransactions) {
-      const parsedTransactions = parseTransactions(JSON.parse(savedTransactions));
-      return {
-        ...initialState,
-        transactions: parsedTransactions
-      };
-    }
-  } catch (error) {
-    console.error('Error loading initial state from localStorage:', error);
-  }
-  return initialState;
+const initialState = {
+  transactions: [],
+  loading: false,
+  error: null
 };
 
 // Provider Component
 export const TransactionProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(transactionReducer, getInitialState());
+  const [state, dispatch] = useReducer(transactionReducer, initialState);
 
-  // Save transactions to localStorage whenever they change
+  // Fetch transactions on initial load
   useEffect(() => {
+    const fetchTransactions = async () => {
+      dispatch({ type: 'SET_LOADING', payload: true });
+      try {
+        const transactions = await getAllTransactions();
+        dispatch({ type: 'SET_TRANSACTIONS', payload: transactions });
+      } catch (error) {
+        dispatch({ type: 'SET_ERROR', payload: error.message });
+      } finally {
+        dispatch({ type: 'SET_LOADING', payload: false });
+      }
+    };
+
+    fetchTransactions();
+  }, []);
+
+  const addNewTransaction = async (transaction) => {
+    dispatch({ type: 'SET_LOADING', payload: true });
     try {
-      const transactionsToStore = prepareTransactionsForStorage(state.transactions);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(transactionsToStore));
+      const newTransaction = await addTransaction(transaction);
+      dispatch({ type: 'ADD_TRANSACTION', payload: newTransaction });
     } catch (error) {
-      console.error('Error saving transactions to localStorage:', error);
+      dispatch({ type: 'SET_ERROR', payload: error.message });
+      throw error;
+    } finally {
+      dispatch({ type: 'SET_LOADING', payload: false });
     }
-  }, [state.transactions]);
-
-  // Action Creators
-  const addTransaction = (transaction) => {
-    dispatch({
-      type: 'ADD_TRANSACTION',
-      payload: {
-        ...transaction,
-        timestamp: new Date()
-      }
-    });
   };
 
-  const editTransaction = (transaction) => {
-    dispatch({
-      type: 'EDIT_TRANSACTION',
-      payload: {
-        ...transaction,
-        timestamp: new Date()
-      }
-    });
+  const editTransaction = async (id, transaction) => {
+    dispatch({ type: 'SET_LOADING', payload: true });
+    try {
+      const updatedTransaction = await updateTransaction(id, transaction);
+      dispatch({ type: 'UPDATE_TRANSACTION', payload: updatedTransaction });
+    } catch (error) {
+      dispatch({ type: 'SET_ERROR', payload: error.message });
+      throw error;
+    } finally {
+      dispatch({ type: 'SET_LOADING', payload: false });
+    }
   };
 
-  const deleteTransaction = (id) => {
-    dispatch({
-      type: 'DELETE_TRANSACTION',
-      payload: id
-    });
+  const removeTransaction = async (id) => {
+    dispatch({ type: 'SET_LOADING', payload: true });
+    try {
+      await deleteTransaction(id);
+      dispatch({ type: 'DELETE_TRANSACTION', payload: id });
+    } catch (error) {
+      dispatch({ type: 'SET_ERROR', payload: error.message });
+      throw error;
+    } finally {
+      dispatch({ type: 'SET_LOADING', payload: false });
+    }
   };
 
   const value = {
     transactions: state.transactions,
     loading: state.loading,
     error: state.error,
-    addTransaction,
-    editTransaction,
-    deleteTransaction
+    addTransaction: addNewTransaction,
+    updateTransaction: editTransaction,
+    deleteTransaction: removeTransaction
   };
 
   return (
