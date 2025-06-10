@@ -1,15 +1,19 @@
-import { useState } from 'react'
-import './App.css'
+import React from 'react';
+import { TransactionProvider } from './context/TransactionContext';
+import Header from './components/layout/Header';
+import Dashboard from './pages/Dashboard';
 
 function App() {
-
   return (
-    <>
-      <h1 class="text-3xl font-bold underline">
-          Hello world!
-      </h1>
-    </>
-  )
+    <TransactionProvider>
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <main>
+          <Dashboard />
+        </main>
+      </div>
+    </TransactionProvider>
+  );
 }
 
-export default App
+export default App;
