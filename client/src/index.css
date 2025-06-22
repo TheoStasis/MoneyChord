@@ -27,10 +27,74 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.container-center {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.container-responsive {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@media (min-width: 640px) {
+  .container-center,
+  .container-responsive {
+    padding: 0 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-center,
+  .container-responsive {
+    padding: 0 2rem;
+  }
+}
+
+.mobile-first {
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .mobile-first {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+}
+
+@media (min-width: 768px) {
+  .mobile-first {
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .mobile-first {
+    max-width: 1024px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .mobile-first {
+    max-width: 1280px;
+  }
 }
 
 h1 {
